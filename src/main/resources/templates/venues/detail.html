@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>All venues</title>
+</head>
+<body>
+	<div layout:fragment="content">
+	    <h1 th:text="'Venue : ' + ${venue.name}" ></h1>
+		<br>
+	    <table class="table table-bordered table-striped table-hover">
+	        <tr th:each="v : ${venue}">
+	          <th><i class="fas fa-building"></i> Venue</th>
+	          <td th:text="${v.name}">My Venue</td>        
+	        </tr>        
+	        <tr th:each="v : ${venue}">       
+	          <th><i class="fas fa-road"></i> Street</th>
+	          <td th:text="${v.streetName}">Venue Street Name</td>     
+	        </tr>        
+	        <tr th:each="v : ${venue}">
+	          <th><i class="fas fa-compass"></i> Postcode</th>
+	          <td th:text="${{v.postcode}}">Venue Postcode</td>        
+	        </tr>              
+	        <tr th:each="v : ${venue}">
+	          <th><i class="fas fa-warehouse"></i> Capacity</th>
+	          <td th:text="${{v.capacity}}">Venue Capacity</td>         
+	        </tr>
+	     </table>
+	     <div>
+		<h1 th:each="v : ${venue}" class="input-group">
+			<form th:action="${(#mvc.url('VC#deleteVenue').arg(0, v.id)).build()}" th:method="delete" sec:authorize="isAuthenticated()">
+       			<button type="submit" class="btn btn-danger" id="delete"><i class="fas fa-trash"></i> Delete</button>
+			</form>
+			<form th:action="@{/venues/update}" th:method="get" sec:authorize="isAuthenticated()" style="padding-left:5px">
+				<input type="hidden" th:name="id" th:value="${v.id}" th:text="${param.id}"/>
+	   			<button type="submit" class="btn btn-primary"><i class="fas fa-bolt"></i> Update</button>
+			</form>
+		</h1>
+
+		</div>
+	     
+	     <br>
+	     
+	     <h3 style='text-align:center'>Events Coming up</h3>
+	     
+	     <table class="table table-bordered table-striped table-hover">
+	     	<thead class='thead-dark'>
+	        <tr>
+	          <th><i class="fas fa-bolt"></i> Event</th>
+	          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+	          <th><i class="fas fa-calendar"></i> Date</th>
+	          <th><i class="fas fa-clock"></i> Time</th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <tr th:each="e : ${upcomingEvents}">
+	          <td>         
+	          	<a th:text="${e.name}" th:href="@{/events/{num}(num=${e.id})}">My Event</a>    
+	          </td>
+	          <td th:text="${e.venue.name}">Event Venue</td>
+	          <td th:text="${{e.date}}">Event Date</td>
+	          <td th:text="${{e.time}}">Event Time</td>
+	          <script>
+				document.getElementById("delete").disabled=true;
+			  </script>
+	        </tr>
+	        <tr th:each="e : ${pastEvents}">
+	        	<script>
+					document.getElementById("delete").disabled=true;
+			 	</script>
+			 </tr>
+	      </tbody>	     
+	     </table>
+
+  	</div>
+
+</body>
+</html>

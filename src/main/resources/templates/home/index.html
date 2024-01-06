@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>Home · EventLite</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h2>Next Three Events</h2><br>
+    <table class="table table-striped table-hover">
+       <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fas fa-clock"></i> Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${nextThreeEvents}">
+          <td>         
+          	<a th:text="${e.name}" th:href="@{/events/{num}(num=${e.id})}">Event Name</a>    
+          </td>
+            <td>
+          	<a th:text="${e.venue.name}" th:href="@{/venues/{num}(num=${e.venue.id})}">My Venue</a>
+          </td>  
+          <td th:text="${{e.date}}">Event Date</td>
+          <td th:text="${{e.time}}">Event Time</td>
+        </tr>
+      </tbody>
+    </table>
+    <br><br>
+  
+  	<h2>Top Three Venues</h2><br>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-building"></i> Venue</th>
+          <th><i class="fas fa-road"></i> Street</th>
+          <th><i class="fas fa-compass"></i> Postcode</th>
+          <th><i class="fas fa-warehouse"></i> Capacity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="v : ${topThreeVenues}">
+          <td>         
+          	<a th:text="${v.name}" th:href="@{/venues/{num}(num=${v.id})}">Venue Name</a>    
+          </td>
+          <td th:text="${v.streetName}">Venue Street Address</td>
+          <td th:text="${{v.postcode}}">Venue Postcode</td>
+          <td th:text="${{v.capacity}}">Venue Capcaity</td>
+        </tr>
+      </tbody>
+    </table>
+  
+  
+  </div>
+</body>
+</html>
+ 

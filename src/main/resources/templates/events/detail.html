@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>Events</title>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1 th:text="'Event : ' + ${events.name}" ></h1>
+    <br>
+    <table class="table table-bordered table-striped table-hover">
+        <tr th:each="e : ${events}">
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <td th:text="${e.name}">My Event</td>        
+        </tr>        
+        <tr th:each="e : ${events}">       
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <td>
+          	<a th:text="${e.venue.name}" th:href="@{/venues/{num}(num=${e.venue.id})}">My Venue</a>
+          </td>     
+        </tr>        
+        <tr th:each="e : ${events}">
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <td th:text="${{e.date}}">Event Date</td>        
+        </tr>              
+        <tr th:each="e : ${events}">
+          <th><i class="fas fa-clock"></i> Time</th>
+          <td th:text="${{e.time}}">Event Time</td>         
+        </tr>
+        <tr th:each="e : ${events}">
+          <th><i class="fas fa-info"></i> Description</th>
+          <td th:text="${{e.description}}">Event Description</td>         
+        </tr>
+     </table>
+ 
+    <div>
+    	<h1 th:each="e : ${events}" class="input-group">
+		<form th:action="${(#mvc.url('EC#deleteEvent').arg(0, e.id)).build()}" th:method="delete" sec:authorize="isAuthenticated()">
+   			<button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+		</form>
+		<form th:action="@{/events/update}" th:method="get" sec:authorize="isAuthenticated()" style="padding-left:5px">
+			<input type="hidden" th:name="id" th:value="${e.id}" th:text="${param.id}"/>
+   			<button type="submit" class="btn btn-primary"><i class="fas fa-bolt"></i> Update</button>
+		</form>
+		</h1>
+	</div>
+
+	<p th:if="${content != null}" style="background:PaleGreen; padding:.5em">Your post: <b th:text="${content}"></b> was posted</p>
+	<br><h5>Share Your Event!</h1><br>
+	<div class="input-group">
+		<form th:action="@{/events/{num}(num=${events.id})}" method="post" style="display:flex; flex-direction:horizontal; width:100%" class="form-outline">
+			<input type="text" name="postContent" th:placeholder="${events.name}" class="form-control" />
+	  		<button type="submit" class="btn btn-info">
+				<i class="fas fa-share"></i>
+			</button>
+		</form>
+    </div>
+		
+    <div id="map"></div>
+    
+    <script th:inline="javascript">
+		mapboxgl.accessToken = 'pk.eyJ1IjoiYWxpaGFzYW4xIiwiYSI6ImNsZjZ1czc2MTB5cDAzeXFoZmdqaDFnYjAifQ.XWhZkhI4t1JLtsDc3sx0_A';
+		const eventName = /*[[${events.name}]]*/ "";
+		const eventTime = /*[[${events.time}]]*/ "";
+		const venueLat = /*[[${events.venue.latitude}]]*/ "";
+		const venueLong = /*[[${events.venue.longitude}]]*/ "";
+			
+		const map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/mapbox/streets-v12',
+			center: [venueLong, venueLat],
+			zoom: 15
+		});
+		
+		let desc = `<h5>${eventName}</h5>`;
+		if(eventTime != null) desc += `Starts At ${eventTime.substr(0,5)}`;
+		new mapboxgl.Marker()
+		.setLngLat([venueLong, venueLat])
+		.setPopup(
+		  new mapboxgl.Popup({ offset: 0 }).setHTML(desc)
+		).addTo(map);
+	</script>
+	<style>
+	body { 
+		margin: 0;
+		padding: 0;
+	}
+	
+	#map { 
+		min-height: 28.5em;
+		position: relative; 
+		margin-top: 5em;
+	}
+	
+	.mapboxgl-popup {
+	  max-width: 200px;
+	}
+	
+	.mapboxgl-popup-content {
+	  text-align: center;
+	  font-family: 'Open Sans', sans-serif;
+	}
+	</style>
+  </div>
+
+</body>
+</html>
+

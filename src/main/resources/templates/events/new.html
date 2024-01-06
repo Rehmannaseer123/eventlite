@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>New</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Add New Event</h1>
+    
+    <form action="#" th:action="@{/events/new}" th:object="${event}" method="post" class="event">
+      <div class="form-group">
+        <label for="name">Event Name</label>
+        <input class="form-control" type="text" name="name" id="name" placeholder="Event Name" />
+        <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">errors</p>
+        <label for="description">Event Description</label>
+        <input class="form-control" type="text" name="description" id="description" placeholder="Event Description" />
+        <p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">errors</p>
+        <label for="date">Event Date</label>
+        <input class="form-control" type="date" name="date" id="date" />
+        <p class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">errors</p>
+        <label for="time">Event Time</label>
+        <input class="form-control" type="time" name="time" id="time" />
+        <p class="text-danger" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">errors</p>
+		<label for="venueId">Venue</label>
+        <select class="form-control" name="venueId" id="venueId" >
+        	 <option value="" selected disabled> Select Venue </option>
+        	 <option th:each="v: ${venues}" th:value="${v.id}" th:text="${v.name}"></option>
+        </select>
+        <p class="text-danger" th:if="${#fields.hasErrors('venueId')}" th:errors="*{venueId}">errors</p>
+      </div>
+    
+      <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

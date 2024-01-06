@@ -1,0 +1,33 @@
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+h1 {
+	letter-spacing: 0.15em;
+	font-weight: 800;
+	transition: 0.625s all ease-in-out;
+	cursor: pointer;
+}
+
+h1:hover {
+	letter-spacing: 0.225em;
+	transform: scale(1.5);
+}
+
+a {
+	color: #E6676B;
+	text-decoration: none;
+	transition: 0.625s all ease-in-out;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #80393C;
+}
+
+a:visited {
+	color: #E6676B;
+}
